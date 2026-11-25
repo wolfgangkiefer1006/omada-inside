@@ -4,6 +4,10 @@
 
 omada-inside ist ein selbst gehostetes Dashboard für die TP-Link Omada Open API. Es summiert den Datenverkehr am WAN-Port eines verwalteten Gateways und zeigt Änderungen bei WLAN-Clients und Access Points. Die App arbeitet mit einem lesenden API-Zugang.
 
+> **Entwicklung:** omada-inside ist ein Projekt von Wolfgang Kiefer. Der KI-Assistent Codex hat bei der Implementierung, den Tests und der Dokumentation mitgewirkt.
+>
+> **Development:** omada-inside is a project by Wolfgang Kiefer. The AI assistant Codex contributed to implementation, testing, and documentation.
+
 ## Funktionen
 
 - **Internet Traffic** berechnet Empfang, Versand und Gesamtvolumen für den gewählten Zeitraum. Die Tabelle schlüsselt die Werte nach Gateway und WAN-Port auf.
