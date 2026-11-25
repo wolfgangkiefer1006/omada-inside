@@ -1,0 +1,62 @@
+<h2>Administration</h2>
+<div class="totals admin-meta">
+  <p>App-Version <strong>$app_version</strong></p>
+  <p>Worker-Build <strong>$worker</strong></p>
+  <p>DB-Schema <strong>$schema</strong><small>$migration</small></p>
+  <p>SQLite <strong>$size</strong><small>$point_count WAN-Messpunkte</small></p>
+</div>
+<section class="panel">
+  <h3>WAN-Import</h3>
+  <p><strong class="status-chip $worker_class">$worker_status</strong> $worker_detail</p>
+  <p class="muted">Letzter Start $last_run · Nächster regulärer Lauf $next_run</p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Start</th><th>Dauer</th><th>Status</th><th>Neue Punkte</th><th>Details</th></tr></thead>
+    <tbody>$run_rows</tbody>
+  </table></div>
+</section>
+<section class="panel">
+  <h3>Archivabdeckung</h3>
+  <div class="table-scroll"><div class="coverage-grid"><span></span>$months$coverage_rows</div></div>
+  <p class="legend"><span class="present">Werte vorhanden</span><span class="empty">Abgefragt, leer</span><span class="partial">Teilweise geprüft</span><span class="unknown">Noch nicht geprüft</span></p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Auflösung</th><th>Messpunkte</th><th>Ältester Punkt</th><th>Neuester Punkt</th></tr></thead>
+    <tbody>$summary_rows</tbody>
+  </table></div>
+</section>
+<section class="panel" id="appearance">
+  <h3>Darstellung</h3>
+  <form method="post" action="/admin/name">
+    <input type="hidden" name="csrf" value="$csrf">
+    <label>Anzeigename <input name="display_name" maxlength="80" value="$display_name" placeholder="omada-inside"></label>
+    <button type="submit">Namen speichern</button>
+  </form>
+  <p class="muted">Ein leeres Feld stellt den Standardnamen wieder her.</p>
+  <h4>Dashboard-Logo</h4>
+  <div class="logo-previews">
+    <figure class="preview light"><img src="/assets/omada-inside.png" alt="Logo auf hellem Hintergrund"><figcaption>Hell</figcaption></figure>
+    <figure class="preview dark"><img src="/assets/omada-inside.png" alt="Logo auf dunklem Hintergrund"><figcaption>Dunkel</figcaption></figure>
+  </div>
+  <form class="brand-upload" data-kind="logo"><label>Logo als PNG <input id="logo-file" type="file" accept="image/png,.png" required></label>
+  <button type="submit">Logo speichern</button></form>
+  <p><small>Maximal 2 MiB und 4096 × 4096 Pixel.</small></p>
+  <p id="logo-status" role="status"></p>
+  <h4>Favicon</h4>
+  <div class="logo-previews">
+    <figure class="preview light favicon-preview">
+      <div><img src="/favicon-16.png?v=$favicon_version" width="16" height="16" alt="16 Pixel"><img src="/favicon-32.png?v=$favicon_version" width="32" height="32" alt="32 Pixel"></div>
+      <figcaption>Hell</figcaption>
+    </figure>
+    <figure class="preview dark favicon-preview">
+      <div><img src="/favicon-16.png?v=$favicon_version" width="16" height="16" alt="16 Pixel"><img src="/favicon-32.png?v=$favicon_version" width="32" height="32" alt="32 Pixel"></div>
+      <figcaption>Dunkel</figcaption>
+    </figure>
+  </div>
+  <form class="brand-upload" data-kind="favicon">
+    <label>Eigenes Favicon als PNG <input type="file" accept="image/png,.png" required></label>
+    <button type="submit">Favicon speichern</button>
+    <button type="button" id="favicon-reset">Zurücksetzen</button>
+  </form>
+  <p><small>Ohne eigenes Favicon verwendet der Tab das Dashboard-Logo oder das Standardsymbol.</small></p>
+  <p id="favicon-status" role="status"></p>
+</section>
+<script src="/assets/admin.js" defer></script>

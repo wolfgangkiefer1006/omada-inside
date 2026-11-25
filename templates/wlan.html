@@ -1,0 +1,10 @@
+<p>$status · Zeiten in UTC</p>
+    <h2>Access Points</h2><section><table><tr><th>Access Point</th><th>Status</th>
+    <th>WLAN-Clients</th><th>Aus Clientliste verschwunden · 24 h</th></tr>
+    ${ap_rows}</table></section>
+    <h2>Zeitleiste · 24 Stunden</h2><form action="/wlan" class="wlan-filter"><label>Gerät oder AP
+    <input name="q" value="${query}" placeholder="Name oder MAC"></label>
+    <button>Suchen</button> <a href="/wlan">Alle zeigen</a></form>
+    <p><small>Beobachtete Änderungen bei 30-Sekunden-Abfragen. Maximal 300 Einträge.</small></p>
+    <section><table><tr><th>Uhrzeit</th><th>Typ</th><th>Name</th><th>MAC</th><th>Beobachtung</th></tr>
+    ${event_rows}</table></section>

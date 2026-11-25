@@ -1,0 +1,7 @@
+<form class="account-form" method="post" action="/login" aria-label="Anmeldung">
+  <input type="hidden" name="csrf" value="$csrf">
+  <label><span class="sr-only">Benutzername</span><input name="username" autocomplete="username" placeholder="Benutzername" required></label>
+  <label><span class="sr-only">Passwort</span><input type="password" name="password" autocomplete="current-password" placeholder="Passwort" required></label>
+  <button type="submit">Anmelden</button>
+  $message
+</form>

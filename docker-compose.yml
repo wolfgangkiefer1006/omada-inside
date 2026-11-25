@@ -1,0 +1,36 @@
+x-omada-connection: &omada-connection
+  OMADA_URL: "${OMADA_URL:?OMADA_URL setzen}"
+  OMADA_ID: "${OMADA_ID:?OMADA_ID setzen}"
+  OMADA_CLIENT_ID: "${OMADA_CLIENT_ID:?OMADA_CLIENT_ID setzen}"
+  OMADA_CLIENT_SECRET: "${OMADA_CLIENT_SECRET:?OMADA_CLIENT_SECRET setzen}"
+  OMADA_SITE_ID: "${OMADA_SITE_ID:-}"
+  OMADA_VERIFY_TLS: "${OMADA_VERIFY_TLS:-true}"
+  APP_TIMEZONE: "${APP_TIMEZONE:-UTC}"
+
+services:
+  omada-inside:
+    image: "${OMADA_IMAGE:?OMADA_IMAGE setzen}"
+    container_name: omada-inside
+    restart: unless-stopped
+    ports:
+      - "${DASHBOARD_PORT:-8787}:8080"
+    environment:
+      <<: *omada-connection
+      APP_ADMIN_PASSWORD: "${APP_ADMIN_PASSWORD:-}"
+      APP_WLAN_KEY: "${APP_WLAN_KEY:-}"
+    volumes:
+      - history:/data
+  omada-inside-worker:
+    image: "${OMADA_IMAGE:?OMADA_IMAGE setzen}"
+    container_name: omada-inside-worker
+    restart: unless-stopped
+    command: ["python", "/app/app.py", "worker"]
+    environment:
+      <<: *omada-connection
+      WAN_ARCHIVE_START: "${WAN_ARCHIVE_START:-}"
+    volumes:
+      - history:/data
+
+volumes:
+  history:
+    name: "${OMADA_HISTORY_VOLUME:-omada-inside_history}"

@@ -1,0 +1,19 @@
+<div class="totals">
+  <p>Monat $current_month <strong>$current_summary</strong>$today_summary</p>
+  <p>Vormonat $previous_month <strong>$previous_summary</strong></p>
+</div>
+<p><small>Zeitzone $timezone. Kräftigere Farben zeigen mehr Traffic im angezeigten Monat. Wähle einen Tag für die Werte pro WAN-Port.</small></p>
+<section class="calendar-scroll">
+  <div class="calendar-grid">
+    <b>Mo</b><b>Di</b><b>Mi</b><b>Do</b><b>Fr</b><b>Sa</b><b>So</b>
+    $cells
+  </div>
+</section>
+<div id="day-detail"$detail_hidden>
+  <h3>WAN-Verbrauch am $detail_heading</h3>
+  $day_hint
+  <section><table>
+    <tr><th>Gateway</th><th>WAN-Port</th><th>Empfangen</th><th>Gesendet</th><th>Gesamt</th></tr>
+    $detail_rows
+  </table></section>
+</div>

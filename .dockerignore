@@ -1,0 +1,10 @@
+**
+!app.py
+!VERSION
+!requirements.txt
+!LICENSE
+!templates/
+!templates/**
+!assets/
+!assets/**
+!Dockerfile

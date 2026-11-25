@@ -1,0 +1,17 @@
+<h2>WLAN &amp; VLANs</h2>
+<p><a href="$filter_link">$filter_label</a></p>
+<form id="network-sync-form" method="post" action="/wlan-vlans">
+  <input type="hidden" name="action" value="sync">
+  <input type="hidden" name="csrf" value="$csrf">
+  <input type="hidden" name="id" value="$sync_id">
+  <input type="hidden" name="inactive" value="$sync_inactive">
+  <button type="submit"$sync_disabled>Jetzt mit Omada abgleichen</button>
+</form>
+<script src="/assets/network-sync.js" defer></script>
+<p class="muted">Letzter erfolgreicher Abgleich · $success</p>
+$sync_error
+$notice
+<div class="network-lists">
+  <section class="panel"><h3>SSIDs</h3><ul>$ssids</ul></section>
+  <section class="panel"><h3>VLANs und LAN-Netze</h3><ul>$vlans</ul></section>
+</div>
