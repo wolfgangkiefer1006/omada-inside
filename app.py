@@ -1277,19 +1277,29 @@ def wlan_cipher():
         return None
 
 
-def credential_password(source, entry, revealed):
-    if revealed and revealed[:2] == (source, entry["id"]):
-        return '<code class="revealed-secret">' + escape(revealed[2]) + '</code>'
-    return '<span aria-label="Kennwort verborgen">••••••••</span>' if entry["secret"] else "–"
-
-
-def credential_reveal(source, entry, item, inactive):
-    return render("network-reveal", csrf=wlan_csrf, object_id=item["id"],
+def credential_password(source, entry, item, inactive, cipher, revealed):
+    if not entry["secret"]:
+        return "–"
+    masked = '<span aria-label="Kennwort verborgen">••••••••</span>'
+    if cipher is None:
+        return masked
+    visible = revealed and revealed[:2] == (source, entry["id"])
+    mask = f'<span class="password-mask"{" hidden" if visible else ""}>{masked}</span>'
+    password = '<code class="revealed-secret">' + escape(revealed[2]) + '</code>' if visible else ""
+    object_id = item["id"]
+    query = {"id": object_id}
+    if inactive:
+        query["inactive"] = 1
+    return render("network-reveal", csrf=wlan_csrf, object_id=object_id,
                   access_id=entry["id"], inactive="1" if inactive else "",
-                  action="reveal_import" if source == "import" else "reveal")
+                  action="reveal_import" if source == "import" else "reveal",
+                  mask=mask, password=password,
+                  reveal_hidden=" hidden" if visible else "",
+                  hide_hidden="" if visible else " hidden",
+                  hide_url=escape("/wlan-vlans?" + urlencode(query) + f"#network-{object_id}"))
 
 
-def imported_network_editor(item, imports, manual, vlan_options, inactive, cipher, revealed):
+def imported_network_editor(item, imports, manual, vlan_options, inactive, cipher, revealed, editable):
     html = []
     for entry in imports:
         if not entry["active"] and not inactive:
@@ -1319,9 +1329,8 @@ def imported_network_editor(item, imports, manual, vlan_options, inactive, ciphe
             detail.append("Weicht vom manuellen Kennwort ab")
         html.append(render("network-credential", label=escape(label), detail=escape(" · ".join(detail)),
                            vlan=escape(vlan), source="Omada",
-                           password=credential_password("import", entry, revealed),
-                           actions=credential_reveal("import", entry, item, inactive)
-                           if cipher and entry["secret"] else ""))
+                           password=credential_password("import", entry, item, inactive, cipher, revealed),
+                           actions="<td></td>" if editable else ""))
     return "".join(html)
 
 
@@ -1340,7 +1349,9 @@ def network_editor(item, access, imports, vlan_options, inactive, cipher, saved=
             4: "PPSK ohne RADIUS", 5: "PPSK mit RADIUS"}.get(item["security"], "")
     credentials = ""
     if item["kind"] == "ssid":
-        rows = [imported_network_editor(item, imports, access, vlan_options, inactive, cipher, revealed)]
+        editable = unlocked and bool(access)
+        columns = 5 if editable else 4
+        rows = [imported_network_editor(item, imports, access, vlan_options, inactive, cipher, revealed, editable)]
         add_form = ""
         entries = [*access, None] if unlocked and (ppsk or not access) else access
         for entry in entries:
@@ -1365,17 +1376,19 @@ def network_editor(item, access, imports, vlan_options, inactive, cipher, saved=
                 continue
             actions = ""
             if unlocked:
-                actions = credential_reveal("manual", entry, item, inactive)
-                actions += (f'<button type="button" class="access-toggle" aria-expanded="false" '
-                            f'aria-controls="{editor_id}">Bearbeiten</button>')
+                actions = (f'<td><button type="button" class="access-toggle" aria-expanded="false" '
+                           f'aria-controls="{editor_id}">Bearbeiten</button></td>')
             rows.append(render("network-credential", label=escape(entry["label"] or mode or "Zugang"),
                                detail=escape(entry["note"]), vlan=escape(target_vlan), source="Manuell",
-                               password=credential_password("manual", entry, revealed), actions=actions))
+                               password=credential_password("manual", entry, item, inactive, cipher, revealed),
+                               actions=actions))
             if form:
-                rows.append(f'<tr id="{editor_id}" class="access-editor" hidden><td colspan="5">{form}</td></tr>')
+                rows.append(f'<tr id="{editor_id}" class="access-editor" hidden><td colspan="{columns}">{form}</td></tr>')
         help_text = "" if unlocked else '<p class="muted">Zum Speichern und Anzeigen APP_WLAN_KEY setzen.</p>'
         credentials = render("network-credentials", rows="".join(rows) or
-                             '<tr><td colspan="5">Keine Zugänge dokumentiert.</td></tr>',
+                             f'<tr><td colspan="{columns}">Keine Zugänge dokumentiert.</td></tr>',
+                             action_header='<th scope="col">Aktionen</th>' if editable else "",
+                             action_column='<col class="credential-action-column">' if editable else "",
                              add_form=add_form, help_text=help_text)
     return render("network-edit", detail=escape(mode), note=escape(item["note"]),
                   csrf=wlan_csrf, object_id=item["id"], inactive="1" if inactive else "",

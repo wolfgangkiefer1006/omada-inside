@@ -108,13 +108,26 @@ tr:last-child td { border-bottom:0 }
 .network-item[open] > summary { background:var(--soft); padding-inline:.5rem; }
 .network-note, .network-add { margin-top:.55rem; }
 .network-note > summary, .network-add > summary { width:fit-content; color:var(--accent); }
-.credential-table { min-width:30rem; }
-.credential-table :is(th,td) { padding:.35rem .5rem; vertical-align:top; }
-.credential-table small { display:block; color:var(--muted); overflow-wrap:anywhere; }
+.credential-table { min-width:25rem; table-layout:fixed; }
+.credential-label-column { width:22%; }
+.credential-vlan-column { width:23%; }
+.credential-source-column { width:12%; }
+.credential-action-column { width:5.25rem; }
+.credential-table :is(th,td) { padding:.35rem .45rem; vertical-align:top; overflow-wrap:anywhere; }
+.credential-table small { display:block; color:var(--muted); }
 .credential-table small:empty { display:none; }
-.credential-table code { overflow-wrap:anywhere; user-select:all; }
-.credential-actions { display:flex; flex-wrap:wrap; gap:.25rem; }
-.credential-actions button { padding:.24rem .42rem; font-size:.82rem; }
+.credential-password { display:flex; align-items:baseline; gap:.35rem; }
+.credential-password code { min-width:0; overflow-wrap:anywhere; white-space:pre-wrap; user-select:all; }
+.credential-reveal, .credential-eye { flex:none; }
+.credential-eye {
+  display:inline-grid; place-items:center; vertical-align:middle;
+  width:1.75rem; height:1.75rem; padding:0; border:1px solid var(--line);
+  border-radius:.4rem; background:var(--surface); color:var(--accent);
+}
+.credential-eye:hover { background:var(--soft); }
+.credential-eye svg { width:1rem; height:1rem; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.credential-password [hidden] { display:none; }
+.access-toggle { padding:.24rem .38rem; white-space:nowrap; font-size:.78rem; }
 .credential-table .access-editor td { background:var(--soft); padding:.6rem; }
 .brand span { min-width:0; overflow-wrap:anywhere; }
 @media(max-width:52rem) { .network-lists { grid-template-columns:minmax(0,1fr); } }

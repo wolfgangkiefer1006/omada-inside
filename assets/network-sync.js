@@ -5,18 +5,26 @@ syncForm.addEventListener("submit", () => {
     syncButton.textContent = "Abgleich läuft …";
 });
 
-document.querySelectorAll(".network-item").forEach((item) => {
-    item.addEventListener("toggle", () => {
-        if (!item.open) {
-            const secret = item.querySelector(".revealed-secret");
-            if (secret) {
-                const mask = document.createElement("span");
-                mask.setAttribute("aria-label", "Kennwort verborgen");
-                mask.textContent = "••••••••";
-                secret.replaceWith(mask);
-            }
-        }
+function hidePassword(password) {
+    password.querySelector(".revealed-secret")?.remove();
+    password.querySelector(".password-mask").hidden = false;
+    password.querySelector(".credential-hide").hidden = true;
+    const reveal = password.querySelector(".credential-reveal");
+    reveal.hidden = false;
+    return reveal.querySelector("button");
+}
+
+document.querySelectorAll(".credential-hide:not([hidden])").forEach((link) => {
+    const password = link.closest(".credential-password");
+    const item = link.closest(".network-item");
+    link.addEventListener("click", (event) => {
+        event.preventDefault();
+        hidePassword(password).focus();
     });
+    item.addEventListener("toggle", () => {
+        if (!item.open) hidePassword(password);
+    });
+    window.addEventListener("pagehide", () => hidePassword(password));
 });
 
 document.querySelectorAll(".access-toggle").forEach((button) => {

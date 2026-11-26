@@ -1,7 +1,15 @@
-<form method="post" action="/wlan-vlans#network-$object_id">
-  <input type="hidden" name="csrf" value="$csrf">
-  <input type="hidden" name="id" value="$object_id">
-  <input type="hidden" name="inactive" value="$inactive">
-  <input type="hidden" name="access" value="$access_id">
-  <button name="action" value="$action">Anzeigen</button>
-</form>
+<div class="credential-password">
+  <form class="credential-reveal" method="post" action="/wlan-vlans#network-$object_id"$reveal_hidden>
+    <input type="hidden" name="csrf" value="$csrf">
+    <input type="hidden" name="id" value="$object_id">
+    <input type="hidden" name="inactive" value="$inactive">
+    <input type="hidden" name="access" value="$access_id">
+    <button class="credential-eye" name="action" value="$action" aria-label="Kennwort anzeigen" title="Kennwort anzeigen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+  </form>
+  <a class="credential-eye credential-hide" href="$hide_url" aria-label="Kennwort verbergen" title="Kennwort verbergen"$hide_hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10 5.3A10 10 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-3 3.8M6.3 6.3A19 19 0 0 0 2 12s3.5 7 10 7a11 11 0 0 0 5.7-1.7M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+  </a>
+  $mask$password
+</div>
